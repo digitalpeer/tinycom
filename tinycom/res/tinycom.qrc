@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>32x32/tinycom.png</file>
+  </qresource>
+</RCC>

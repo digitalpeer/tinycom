@@ -1,0 +1,5 @@
+*.pyc
+/tinycom.egg-info
+/dist
+/build
+tinycom.log

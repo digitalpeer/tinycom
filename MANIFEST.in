@@ -1,0 +1,8 @@
+include README.md
+include LICENSE.txt
+include CHANGES.rst
+include HACKING.rst
+include Makefile
+include pylintrc
+recursive-include tinycom/res *
+recursive-include screenshots *
