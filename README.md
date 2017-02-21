@@ -34,11 +34,8 @@ Python interpreter and QT API are supported.
 
 Installation
 ------------
-Because all major versions of both the Python interpreter and QT API are
-supported, it can easily convolute these instructions.  For simplicity,
-instructions for only PyQt4 and Python2 are listed here - which are at this
-point, well supported. Just know that you can adjust these instructions to
-hit any combination of dependencies and Pythin version you're targetting.
+For simplicity, instructions for only PyQt4 and Python2 are listed here.
+However, you can adjust to use Python3 and/or PySide if you prefer.
 
 On Ubuntu, first install dependencies using the system package manager.
 
