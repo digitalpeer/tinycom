@@ -255,7 +255,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         Interpret the user input text as hex or append appropriate line ending.
         """
         endings = [u"\n", u"\r", u"\r\n", u"\n\r", u"", u""]
-        text = self.input.text()#.encode('ascii', 'ignore')
+        text = self.input.text()
 
         if self.line_end.currentText() == "Hex":
             text = ''.join(text.split())
