@@ -6,7 +6,7 @@ useful for talking to a variety of serial based hardware that can involve custom
 protocols or just a standard command line interface.  It runs on anything that
 supports Python and Qt.
 
-Tinycom is inspired by the original [CuteCom](http://cutecom.sourceforge.net/).
+TinyCom is inspired by the original [CuteCom](http://cutecom.sourceforge.net/).
 
 
 Features
@@ -55,7 +55,7 @@ Or, if you're installing from source:
 The --user option causes tinycom to be installed in your home directory under
 ~/.local.
 
-Then, if you somehow get fed up with tinycom's awesomeness, uninstall it.
+Then, if you somehow get fed up with TinyCom's awesomeness, uninstall it.
 
     pip uninstall tinycom
 
@@ -73,7 +73,7 @@ Screenshots
 
 PyQt4/PySide
 ------------------
-Tinycom can use PyQt4 or PySide for its Qt API.  As long as you have one
+TinyCom can use PyQt4 or PySide for its Qt API.  As long as you have one
 installed, it will be automatically detected and used in that order at runtime.
 However, if you wish to force a specific Qt API, you can set the QT_API
 environment variable to one of the following values when running.
@@ -84,5 +84,5 @@ environment variable to one of the following values when running.
 
 License
 -------
-tinycom is licensed under GPL Version 3.  See the `LICENSE.txt` file.  `qt.py`
+TinyCom is licensed under GPL Version 3.  See the `LICENSE.txt` file.  `qt.py`
 is licensed under 3-clause BSD.

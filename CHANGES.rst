@@ -1,5 +1,5 @@
 ========================
- tinycom Release Notes
+TinyCom Release Notes
 ========================
 
 Version 1.0     20 Feb 2017
