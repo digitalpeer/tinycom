@@ -1,16 +1,8 @@
-UIC = pyuic4 --from-imports
 RCC = pyrcc4 -py3
 
-generated = tinycom/ui_tinycom.py \
-	tinycom/ui_settings.py \
-	tinycom/tinycom_rc.py
+generated = tinycom/tinycom_rc.py
 
 all: $(generated)
-
-tinycom/ui_%.py: tinycom/%.ui
-	$(UIC) $< -o $@
-# Get rid of the generated PyQt4 import and use our own wrapper
-	sed -i 's/from PyQt4 import QtCore, QtGui/from .qt import */' $@
 
 tinycom/%_rc.py: tinycom/res/%.qrc
 	$(RCC) $< -o $@

@@ -4,5 +4,6 @@ include CHANGES.rst
 include HACKING.rst
 include Makefile
 include pylintrc
+include tinycom/*.ui
 recursive-include tinycom/res *
 recursive-include screenshots *

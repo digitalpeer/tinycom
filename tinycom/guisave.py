@@ -20,38 +20,38 @@ def save(ui, settings, controls):
         if name not in controls:
             continue
 
-        if isinstance(obj, QtGui.QComboBox):
+        if isinstance(obj, QT_QComboBox):
             name = obj.objectName()
             index = obj.currentIndex()
             text = obj.itemText(index)
             settings.setValue(name, text)
 
-        if isinstance(obj, QtGui.QLineEdit):
+        if isinstance(obj, QT_QLineEdit):
             name = obj.objectName()
             value = obj.text()
             settings.setValue(name, value)
 
-        if isinstance(obj, QtGui.QCheckBox):
+        if isinstance(obj, QT_QCheckBox):
             name = obj.objectName()
             state = obj.isChecked()
             settings.setValue(name, state)
 
-        if isinstance(obj, QtGui.QRadioButton):
+        if isinstance(obj, QT_QRadioButton):
             name = obj.objectName()
             value = obj.isChecked()
             settings.setValue(name, value)
 
-        if isinstance(obj, QtGui.QSpinBox):
+        if isinstance(obj, QT_QSpinBox):
             name = obj.objectName()
             value = obj.value()
             settings.setValue(name, value)
 
-        if isinstance(obj, QtGui.QSlider):
+        if isinstance(obj, QT_QSlider):
             name = obj.objectName()
             value = obj.value()
             settings.setValue(name, value)
 
-        if isinstance(obj, QtGui.QSplitter):
+        if isinstance(obj, QT_QSplitter):
             name = obj.objectName()
             settings.setValue(name, obj.saveState())
 
@@ -78,7 +78,7 @@ def load(ui, settings):
         ui.restoreGeometry(settings.value('geometry'))
 
     for name, obj in inspect.getmembers(ui):
-        if isinstance(obj, QtGui.QComboBox):
+        if isinstance(obj, QT_QComboBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
@@ -92,42 +92,42 @@ def load(ui, settings):
             else:
                 obj.setCurrentIndex(index)
 
-        if isinstance(obj, QtGui.QLineEdit):
+        if isinstance(obj, QT_QLineEdit):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setText(value)
 
-        if isinstance(obj, QtGui.QCheckBox):
+        if isinstance(obj, QT_QCheckBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setChecked(value.lower() in ["true", "1", "yes", "y"])
 
-        if isinstance(obj, QtGui.QRadioButton):
+        if isinstance(obj, QT_QRadioButton):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setChecked(value.lower() in ["true", "1", "yes", "y"])
 
-        if isinstance(obj, QtGui.QSlider):
+        if isinstance(obj, QT_QSlider):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setValue(int(value))
 
-        if isinstance(obj, QtGui.QSpinBox):
+        if isinstance(obj, QT_QSpinBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setValue(int(value))
 
-        if isinstance(obj, QtGui.QSplitter):
+        if isinstance(obj, QT_QSplitter):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:

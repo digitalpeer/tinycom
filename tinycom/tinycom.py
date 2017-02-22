@@ -15,9 +15,8 @@ import serial
 from pkg_resources import parse_version
 from .qt import *
 from . import __version__
-from .ui_tinycom import Ui_MainWindow
-from .ui_settings import Ui_SettingsDialog
 from . import guisave
+from .tinycom_rc import *
 
 # By default, a thread is used to process the serial port. If this is set to
 # False, a timer will poll the serial port at a fixed interval, whcih can have
@@ -61,11 +60,18 @@ def hex_to_raw(hexstr):
     """Convert a hex encoded string to raw bytes."""
     return ''.join(chr(int(x, 16)) for x in _chunks(hexstr, 2))
 
-class SettingsDialog(QtGui.QDialog, Ui_SettingsDialog):
+def load_ui_widget(filename, this):
+    """Abstracts out using custom loadUi(), necessry with pySide, or PYQt's uic.loadUi()."""
+    if USE_QT_PY == PYSIDE:
+        loadUi(filename, this)
+    else:
+        uic.loadUi(filename, this)
+
+class SettingsDialog(QT_QDialog):
     """Settings dialog."""
     def __init__(self, parent=None):
         super(SettingsDialog, self).__init__(parent)
-        self.setupUi(self)
+        load_ui_widget(os.path.join(os.path.dirname(__file__), 'settings.ui'), self)
 
         try:
             self.port.addItems(serial_ports())
@@ -121,11 +127,11 @@ class SettingsDialog(QtGui.QDialog, Ui_SettingsDialog):
                       "xonxoff", "rtscts", "dsrdtr"])
         self.settings.endGroup()
 
-class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
+class MainWindow(QT_QMainWindow):
     """The main window."""
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.setupUi(self)
+        load_ui_widget(os.path.join(os.path.dirname(__file__), 'tinycom.ui'), self)
         self.serial = None
 
         ports = []
@@ -145,7 +151,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.line_end.currentIndexChanged.connect(self.on_input_changed)
         self.btn_clear.clicked.connect(self.on_btn_clear)
         self.btn_open_log.clicked.connect(self.on_btn_open_log)
-        self.actionQuit.triggered.connect(QtGui.qApp.quit)
+        self.actionQuit.triggered.connect(QT_QApplication.quit)
         self.actionAbout.triggered.connect(self.on_about)
         self.history.itemDoubleClicked.connect(self.on_history_double_click)
 
@@ -299,7 +305,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.echo_input.isChecked():
             self.do_log(raw)
 
-        item = QtGui.QListWidgetItem(self.input.text())
+        item = QT_QListWidgetItem(self.input.text())
         self.history.addItem(item)
         self.history.scrollToItem(item)
 
@@ -307,11 +313,11 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def on_btn_open_log(self):
         """Open log file button clicked."""
-        dialog = QtGui.QFileDialog(self)
+        dialog = QT_QFileDialog(self)
         dialog.setWindowTitle('Open File')
         dialog.setNameFilter("All files (*.*)")
         dialog.setFileMode(QtGui.QFileDialog.AnyFile)
-        if dialog.exec_() == QtGui.QDialog.Accepted:
+        if dialog.exec_() == QT_QDialog.Accepted:
             filename = dialog.selectedFiles()[0]
             self.log_file.setText(filename)
 
@@ -379,7 +385,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 def main():
     """Create main app and window."""
-    app = QtGui.QApplication(sys.argv)
+    app = QT_QApplication(sys.argv)
     app.setApplicationName("TinyCom")
     win = MainWindow(None)
     win.setWindowTitle("TinyCom " + __version__)

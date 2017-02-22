@@ -28,10 +28,10 @@ Or install in development mode using one of:
 This will give you a `tinycom` target to run.
 
 
-PyQt4/PySide
+PyQt4/PyQt5/PySide
 ------------------
-See the note in the `README.md` about PyQt4 vs. PySide. Both are supported at
-runtime with qt.py import abstraction.  PyQt5 support is not included/complete.
+See the note in the `README.md` about PyQt vs. PySide. Both are supported at
+runtime with qt.py import abstraction.
 
 
 Release Process
