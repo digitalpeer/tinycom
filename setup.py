@@ -37,15 +37,12 @@ setup(
     package_data={
         '': ['*.txt', '*.rst', '*.md'],
     },
-
     entry_points={
         'gui_scripts': [
             'tinycom = tinycom.tinycom:main',
         ]
     },
-    install_requires=[
-    ],
-
+    install_requires=[],
     keywords='serial terminal',
     license='GPL3',
     classifiers=['Development Status :: 3 - Alpha',
