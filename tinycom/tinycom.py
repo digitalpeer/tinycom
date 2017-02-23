@@ -24,7 +24,7 @@ from .tinycom_rc import *
 USE_THREAD = True
 
 if USE_THREAD:
-    from .serialthread import *
+    from .serialthread import * # pylint: disable=wrong-import-position
 
 def serial_ports():
     """Gather all serial ports found on system."""
