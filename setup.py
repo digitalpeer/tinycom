@@ -18,8 +18,13 @@ class sdist(_sdist):
             raise SystemExit(e)
         _sdist.run(self)
 
-with codecs.open('README.md', encoding='utf-8') as f:
-    README = f.read()
+try:
+    import pypandoc
+    README = pypandoc.convert('README.md', 'rst')
+except ImportError:
+    with codecs.open('README.md', encoding='utf-8') as f:
+        README = f.read()
+
 with codecs.open('CHANGES.rst', encoding='utf-8') as f:
     CHANGES = f.read()
 
