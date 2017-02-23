@@ -2,6 +2,4 @@
 
 """TinyCom"""
 
-__version__ = "1.0"
-
-#from .tinycom import *
+__version__ = "1.1"
