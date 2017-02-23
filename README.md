@@ -66,7 +66,7 @@ Just execute `tinycom`.
 
 Screenshots
 -----------
-![Main Window](screenshots/main_window.png)
+![Main Window](https://raw.githubusercontent.com/digitalpeer/tinycom/master/screenshots/main_window.png)
 
 
 PyQt4/PyQt5/PySide
