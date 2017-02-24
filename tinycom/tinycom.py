@@ -325,9 +325,10 @@ class MainWindow(QT_QMainWindow):
         if self.echo_input.isChecked():
             self.do_log(raw)
 
-        item = QT_QListWidgetItem(self.input.text())
-        self.history.addItem(item)
-        self.history.scrollToItem(item)
+        if len(self.input.text()):
+            item = QT_QListWidgetItem(self.input.text())
+            self.history.addItem(item)
+            self.history.scrollToItem(item)
 
         self.input.clear()
 
