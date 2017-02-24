@@ -7,7 +7,7 @@ all: $(generated)
 tinycom/%_rc.py: tinycom/res/%.qrc
 	$(RCC) $< -o $@
 # Get rid of the generated PyQt4 import and use our own wrapper
-	sed -i 's/from PyQt4 import QtCore/from .qt import */' $@
+	sed -i 's/from PyQt4 import QtCore/from qt import */' $@
 
 LINT_FILES=tinycom/tinycom.py \
 	tinycom/guisave.py \

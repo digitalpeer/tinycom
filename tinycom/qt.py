@@ -103,7 +103,7 @@ elif USE_QT_PY == PYSIDE:
     QT_QSplitter=QtGui.QSplitter
     QT_QListWidgetItem=QtGui.QListWidgetItem
     QT_QLabel=QtGui.QLabel
-    from .pyside_dynamic import *
+    from pyside_dynamic import *
 
 elif USE_QT_PY == PYQT4:
     import sip

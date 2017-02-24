@@ -2,7 +2,7 @@
 # Copyright (c) 2017 Joshua Henderson <digitalpeer@digitalpeer.com>
 #
 # SPDX-License-Identifier: GPL-3.0
-from .qt import *
+from qt import *
 
 class CustomLineEdit(QT_QLineEdit):
     """Custom line edit class that handles special key events."""

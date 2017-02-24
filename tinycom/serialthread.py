@@ -6,7 +6,7 @@ Wraps a serial port in a thread.
 """
 import threading
 import serial
-from .qt import *
+from qt import *
 
 class SerialThread(QtCore.QThread):
     """Serial thread."""

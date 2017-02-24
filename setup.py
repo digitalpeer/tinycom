@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 from setuptools.command.sdist import sdist as _sdist
 import subprocess
 import codecs
-from tinycom import __version__
+from tinycom.version import __version__
 
 class sdist(_sdist):
     def run(self):

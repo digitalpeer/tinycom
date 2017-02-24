@@ -13,10 +13,10 @@ import re
 import codecs
 import serial
 from pkg_resources import parse_version
-from .qt import *
-from . import __version__
-from . import guisave
-from .tinycom_rc import *
+from qt import *
+from version import __version__
+import guisave
+import tinycom_rc # pylint: disable=unused-import
 from lineedit import CustomLineEdit
 
 # By default, a thread is used to process the serial port. If this is set to
@@ -25,7 +25,7 @@ from lineedit import CustomLineEdit
 USE_THREAD = True
 
 if USE_THREAD:
-    from .serialthread import * # pylint: disable=wrong-import-position
+    import serialthread # pylint: disable=wrong-import-position
 
 def serial_ports():
     """Gather all serial ports found on system."""
@@ -194,7 +194,7 @@ class MainWindow(QT_QMainWindow):
             self.timer = QtCore.QTimer()
             self.timer.timeout.connect(self.read_data)
         else:
-            self.thread = SerialThread(self.serial)
+            self.thread = serialthread.SerialThread(self.serial)
             self.thread.recv.connect(self.recv)
             self.thread.recv_error.connect(self.recv_error)
 

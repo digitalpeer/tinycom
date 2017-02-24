@@ -7,7 +7,7 @@
 """Saves and loads Qt GUI Control Settings"""
 import sys
 import inspect
-from .qt import *
+from qt import *
 
 def save(ui, settings, controls):
     """Save the state of controls to settings."""
