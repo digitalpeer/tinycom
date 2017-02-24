@@ -26,3 +26,7 @@ clean:
 package: $(generated)
 	python setup.py sdist
 	python setup.py bdist_wheel
+
+installer: $(generated)
+	pyinstaller -y tinycom.spec
+	( cd dist && zip tinycom.zip -r tinycom )

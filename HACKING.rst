@@ -30,8 +30,9 @@ Windows
 -------
 Download and install Python.
 Add C:\Python27\ to system Path variable.
-download and install pip.
+Download and install pip.
 Add C:\Python27\Scripts to system Path variable.
+Fire up a win32 command prompt.
 
     pip install pyinstaller
     pip install pyserial
