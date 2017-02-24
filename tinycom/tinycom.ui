@@ -39,13 +39,20 @@
       <property name="leftMargin">
        <number>0</number>
       </property>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="echo_input">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="remove_escape">
         <property name="toolTip">
-         <string>Put any input in the output window automatically.</string>
+         <string>Remove ANSI escape sequences in the output and log.</string>
         </property>
         <property name="text">
-         <string>Local Echo</string>
+         <string>Remove ANSI Escape Sequences</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="serial_str">
+        <property name="text">
+         <string>Not connected</string>
         </property>
        </widget>
       </item>
@@ -62,20 +69,20 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="remove_escape">
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="echo_input">
         <property name="toolTip">
-         <string>Remove ANSI escape sequences in the output and log.</string>
+         <string>Put any input in the output window automatically.</string>
         </property>
         <property name="text">
-         <string>Remove ANSI Escape Sequences</string>
+         <string>Local Echo</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="serial_str">
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="lock">
         <property name="text">
-         <string>Not connected</string>
+         <string>Lock Output</string>
         </property>
        </widget>
       </item>

@@ -264,9 +264,13 @@ class MainWindow(QT_QMainWindow):
             text = str_to_hex(text)
             text = ' '.join(a+b for a, b in zip(text[::2], text[1::2]))
             text = text + ' '
-        self.log.moveCursor(QtGui.QTextCursor.End)
-        self.log.insertPlainText(text)
-        self.log.moveCursor(QtGui.QTextCursor.End)
+
+        cursor = self.log.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        if not self.lock.isChecked():
+            self.log.moveCursor(QtGui.QTextCursor.End)
+
         if self.enable_log.isChecked() and len(self.log_file.text()):
             with open(self.log_file.text(), "a") as handle:
                 handle.write(text)
