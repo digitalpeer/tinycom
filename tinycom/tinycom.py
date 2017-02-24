@@ -17,6 +17,7 @@ from .qt import *
 from . import __version__
 from . import guisave
 from .tinycom_rc import *
+from lineedit import CustomLineEdit
 
 # By default, a thread is used to process the serial port. If this is set to
 # False, a timer will poll the serial port at a fixed interval, whcih can have
@@ -73,7 +74,7 @@ def humansize(nbytes):
 def load_ui_widget(filename, this):
     """Abstracts out using custom loadUi(), necessry with pySide, or PYQt's uic.loadUi()."""
     if USE_QT_PY == PYSIDE:
-        loadUi(filename, this)
+        loadUi(filename, this, dict(CustomLineEdit=CustomLineEdit))
     else:
         uic.loadUi(filename, this)
 
@@ -145,6 +146,7 @@ class MainWindow(QT_QMainWindow):
         self.serial = None
         self.rx = 0
         self.tx = 0
+        self.history_index = 0
 
         ports = []
         try:
@@ -195,6 +197,8 @@ class MainWindow(QT_QMainWindow):
             self.thread = SerialThread(self.serial)
             self.thread.recv.connect(self.recv)
             self.thread.recv_error.connect(self.recv_error)
+
+        self.input.key_event.connect(self.on_input_key)
 
     def ui_connected_enable(self, connected):
         """Toggle enabled on controls based on connect."""
@@ -303,6 +307,22 @@ class MainWindow(QT_QMainWindow):
         if self.serial is not None and self.serial.isOpen():
             self.btn_send.setEnabled(True)
 
+    def on_input_key(self, key):
+        """Input line edit key pressed."""
+        if key == QtCore.Qt.Key_Up:
+            if self.history_index > 0:
+                self.history_index -= 1
+                item = self.history.item(self.history_index)
+                self.input.setText(item.text())
+        elif key == QtCore.Qt.Key_Down:
+            if self.history_index < self.history.count():
+                self.history_index += 1
+                if self.history_index == self.history.count():
+                    self.input.setText("")
+                else:
+                    item = self.history.item(self.history_index)
+                    self.input.setText(item.text())
+
     def on_btn_send(self):
         """Send button clicked."""
         if not self.serial.isOpen():
@@ -329,6 +349,7 @@ class MainWindow(QT_QMainWindow):
             item = QT_QListWidgetItem(self.input.text())
             self.history.addItem(item)
             self.history.scrollToItem(item)
+            self.history_index = self.history.count()
 
         self.input.clear()
 

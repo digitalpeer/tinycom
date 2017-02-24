@@ -238,7 +238,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="input">
+       <widget class="CustomLineEdit" name="input">
         <property name="toolTip">
          <string/>
         </property>
@@ -331,6 +331,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>tinycom.lineedit</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="res/tinycom.qrc"/>
  </resources>
