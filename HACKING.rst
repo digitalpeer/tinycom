@@ -1,8 +1,7 @@
 Developer Notes
 ===============
-The UI is built with QT Designer.  The resulting *.ui is then used to generate a
-*.py file to create the UI.  In any event, this should provide all tools on
-Ubuntu.
+The UI is built with QT Designer.  The resulting *.ui is then loaded at runtime
+to create the UI.  In any event, this should provide all tools on Ubuntu.
 
 Install PyQt or PySide tools.
 
@@ -27,11 +26,29 @@ Or install in development mode using one of:
 
 This will give you a `tinycom` target to run.
 
+Windows
+-------
+Download and install Python.
+Add C:\Python27\ to system Path variable.
+download and install pip.
+Add C:\Python27\Scripts to system Path variable.
+
+    pip install pyinstaller
+    pip install pyserial
+    pip install PySide
+
+Now you can just run tinycom.
+
+PyInstaller
+===========
+
+    python -m tinycom
+    pyinstaller tinycom.spec
 
 PyQt4/PyQt5/PySide
 ------------------
 See the note in the `README.md` about PyQt vs. PySide. Both are supported at
-runtime with qt.py import abstraction.
+runtime with ''qt.py'' import abstraction.
 
 
 Release Process

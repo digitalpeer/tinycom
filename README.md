@@ -57,6 +57,15 @@ Then, if you somehow get fed up with TinyCom's awesomeness, uninstall it.
 
     pip uninstall tinycom
 
+Windows
+-------
+Download and install Python.
+Add C:\Python27\ to system Path variable.
+download and install pip.
+Add C:\Python27\Scripts to system Path variable.
+pip install pyserial
+pip install PySide
+pip install tinycom
 
 Running
 -------
