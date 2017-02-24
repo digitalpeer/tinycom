@@ -346,7 +346,6 @@ class MainWindow(QT_QMainWindow):
         """Send log item double clicked."""
         self.input.setText(item.text())
         self.on_btn_send()
-        self.input.clear()
 
     def on_btn_clear(self):
         """Clear button clicked."""
