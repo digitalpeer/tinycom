@@ -85,6 +85,7 @@ if USE_QT_PY == PYQT5:
     QT_QSlider=QtWidgets.QSlider
     QT_QSplitter=QtWidgets.QSplitter
     QT_QListWidgetItem=QtWidgets.QListWidgetItem
+    QT_QLabel=QtWidgets.QLabel
 
 elif USE_QT_PY == PYSIDE:
     from PySide import QtCore, QtGui, QtUiTools
@@ -101,6 +102,7 @@ elif USE_QT_PY == PYSIDE:
     QT_QSlider=QtGui.QSlider
     QT_QSplitter=QtGui.QSplitter
     QT_QListWidgetItem=QtGui.QListWidgetItem
+    QT_QLabel=QtGui.QLabel
     from .pyside_dynamic import *
 
 elif USE_QT_PY == PYQT4:
@@ -120,3 +122,4 @@ elif USE_QT_PY == PYQT4:
     QT_QSlider=QtGui.QSlider
     QT_QSplitter=QtGui.QSplitter
     QT_QListWidgetItem=QtGui.QListWidgetItem
+    QT_QLabel=QtGui.QLabel

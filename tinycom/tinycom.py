@@ -60,6 +60,16 @@ def hex_to_raw(hexstr):
     """Convert a hex encoded string to raw bytes."""
     return ''.join(chr(int(x, 16)) for x in _chunks(hexstr, 2))
 
+suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+def humansize(nbytes):
+    if nbytes == 0: return '0 B'
+    i = 0
+    while nbytes >= 1024 and i < len(suffixes)-1:
+        nbytes /= 1024.
+        i += 1
+    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (f, suffixes[i])
+
 def load_ui_widget(filename, this):
     """Abstracts out using custom loadUi(), necessry with pySide, or PYQt's uic.loadUi()."""
     if USE_QT_PY == PYSIDE:
@@ -133,6 +143,8 @@ class MainWindow(QT_QMainWindow):
         super(MainWindow, self).__init__(parent)
         load_ui_widget(os.path.join(os.path.dirname(__file__), 'tinycom.ui'), self)
         self.serial = None
+        self.rx = 0
+        self.tx = 0
 
         ports = []
         try:
@@ -158,6 +170,9 @@ class MainWindow(QT_QMainWindow):
         self.input.setEnabled(False)
         self.btn_send.setEnabled(False)
         self.history.setEnabled(False)
+
+        self.rxtx = QT_QLabel()
+        self.statusBar().addPermanentWidget(self.rxtx)
 
         self.settings = QtCore.QSettings('tinycom', 'tinycom')
         self.settings.beginGroup("mainWindow")
@@ -294,7 +309,8 @@ class MainWindow(QT_QMainWindow):
                 ret = self.serial.write(raw)
             else:
                 ret = self.thread.write(raw)
-            self.statusBar().showMessage("Wrote " + str(ret) + " bytes")
+            self.tx = self.tx + ret
+            self.rxtx.setText("TX: " + humansize(self.tx) + "  RX: " + humansize(self.rx))
         except serial.SerialException as exp:
             QtGui.QMessageBox.critical(self, 'Serial write error', str(exp))
             return
@@ -344,7 +360,9 @@ class MainWindow(QT_QMainWindow):
     def recv(self, text):
         """Receive data from the serial port signal."""
         if len(text):
-            self.statusBar().showMessage("Read " + str(len(text)) + " bytes")
+            size = len(text)
+            self.rx = self.rx + size
+            self.rxtx.setText("TX: " + humansize(self.tx) + "  RX: " + humansize(self.rx))
             self.do_log(text)
 
     def recv_error(self, error):
