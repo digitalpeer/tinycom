@@ -36,7 +36,7 @@ class SerialThread(QtCore.QThread):
         error = None
         while self.alive and self.serial.isOpen:
             try:
-                data = self.serial.read(1024)
+                data = self.serial.read(1024 * 8)
             except serial.SerialException as exp:
                 error = str(exp)
                 break
