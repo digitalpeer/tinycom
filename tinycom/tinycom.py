@@ -261,7 +261,7 @@ class MainWindow(QT_QMainWindow):
 
     def do_log(self, text):
         """Write to log file."""
-        text = text.decode("utf-8", 'replace')
+        text = text.decode("utf-8", 'backslashreplace')
         if self.remove_escape.isChecked():
             text = self.ansi_escape.sub('', text)
         if self.output_hex.isChecked():
