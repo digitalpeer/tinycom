@@ -393,11 +393,7 @@ class MainWindow(QT_QMainWindow):
     def recv_error(self, error):
         """Receive error when reading serial port from signal."""
         QtGui.QMessageBox.critical(self, 'Serial read error', error)
-        if not USE_THREAD:
-            self.timer.stop()
-            self.serial.close()
-        else:
-            self.thread.close()
+        self.on_btn_open()
 
     def on_about(self):
         """About menu clicked."""
