@@ -419,7 +419,7 @@ class MainWindow(QT_QMainWindow):
         guisave.save(self, self.settings,
                      ["ui", "remove_escape",
                       "echo_input", "log_file", "enable_log", "line_end",
-                      "zsplitter", "output_hex"])
+                      "splitter", "output_hex"])
         self.settings.endGroup()
 
 def main():
