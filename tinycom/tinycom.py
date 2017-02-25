@@ -148,6 +148,8 @@ class MainWindow(QT_QMainWindow):
         self.tx = 0
         self.history_index = 0
 
+        self.statusBar().showMessage("Not connected")
+
         ports = []
         try:
             ports = serial_ports()
@@ -173,7 +175,7 @@ class MainWindow(QT_QMainWindow):
         self.btn_send.setEnabled(False)
         self.history.setEnabled(False)
 
-        self.rxtx = QT_QLabel()
+        self.rxtx = QT_QLabel("TX: 0 B  RX: 0 B")
         self.statusBar().addPermanentWidget(self.rxtx)
 
         self.settings = QtCore.QSettings('tinycom', 'tinycom')
@@ -220,8 +222,7 @@ class MainWindow(QT_QMainWindow):
             else:
                 self.thread.close()
             self.ui_connected_enable(False)
-            self.statusBar().showMessage("Closed " + self.serial.port)
-            self.serial_str.setText("Not connected")
+            self.statusBar().showMessage("Not connected")
         else:
             dlg = SettingsDialog(self)
             if dlg.exec_():
@@ -246,14 +247,13 @@ class MainWindow(QT_QMainWindow):
                 else:
                     self.serial.flushInput() # pylint: disable=no-member
                     self.serial.flushOutput() # pylint: disable=no-member
-                self.serial_str.setText('Connected to ' + settings['port'] +
+                self.statusBar().showMessage('Connected to ' + settings['port'] +
                                         ' ' +
                                         str(settings['baudrate']) + ',' +
                                         str(settings['parity']) + ',' +
                                         str(settings['bytesize']) + ',' +
                                         str(settings['stopbits']))
                 self.ui_connected_enable(True)
-                self.statusBar().showMessage("Opened " + self.serial.port)
                 if not USE_THREAD:
                     self.timer.start(100)
                 else:
