@@ -393,14 +393,24 @@ class MainWindow(QMainWindow):
 
     def onAbout(self):
         """About menu clicked."""
-        msg = QtGui.QMessageBox(self)
-        msg.setIcon(QtGui.QMessageBox.Information)
-        msg.setText("TinyCom " + __version__)
+        msg = QMessageBox(self)
+        image = QImage(":/icons/32x32/tinycom.png")
+        pixmap = QPixmap(image).scaledToHeight(32,
+                                               Qt.SmoothTransformation)
+        msg.setIconPixmap(pixmap)
         msg.setInformativeText("Copyright (c) 2017 Joshua Henderson")
-        msg.setWindowTitle("TinyCom")
-        with codecs.open('LICENSE.txt', encoding='utf-8') as f:
+        msg.setWindowTitle("TinyCom " + __version__)
+        with codecs.open(os.path.join(os.path.dirname(__file__),'LICENSE.txt'),
+                         encoding='utf-8') as f:
             msg.setDetailedText(f.read())
-        msg.setStandardButtons(QtGui.QMessageBox.Ok)
+        msg.setText(
+            "<p><b>TinyCom</b> is a simple line based serial terminal GUI"
+            " written in Python. This is a tool that's useful for talking to a"
+            " variety of serial based hardware that can involve custom protocols"
+            " or just a standard command line interface.  It runs on anything that"
+            "supports Python and Qt.")
+
+        msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
 
     def closeEvent(self, unused_event):
