@@ -63,7 +63,8 @@ def hex_to_raw(hexstr):
 
 def human_size(nbytes):
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
-    if nbytes == 0: return '0 B'
+    if nbytes == 0:
+        return '0 B'
     i = 0
     while nbytes >= 1024 and i < len(suffixes)-1:
         nbytes /= 1024.
@@ -244,11 +245,11 @@ class MainWindow(QMainWindow):
                     self.serial.flushInput() # pylint: disable=no-member
                     self.serial.flushOutput() # pylint: disable=no-member
                 self.statusBar().showMessage('Connected to ' + settings['port'] +
-                                        ' ' +
-                                        str(settings['baudrate']) + ',' +
-                                        str(settings['parity']) + ',' +
-                                        str(settings['bytesize']) + ',' +
-                                        str(settings['stopbits']))
+                                             ' ' +
+                                             str(settings['baudrate']) + ',' +
+                                             str(settings['parity']) + ',' +
+                                             str(settings['bytesize']) + ',' +
+                                             str(settings['stopbits']))
                 self.uiConnectedEnable(True)
                 if not USE_THREAD:
                     self.timer.start(100)
@@ -330,7 +331,8 @@ class MainWindow(QMainWindow):
             else:
                 ret = self.thread.write(raw)
             self.tx = self.tx + ret
-            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " + human_size(self.rx))
+            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " +
+                              human_size(self.rx))
         except serial.SerialException as exp:
             QtGui.QMessageBox.critical(self, 'Serial write error', str(exp))
             return
@@ -383,7 +385,8 @@ class MainWindow(QMainWindow):
         if len(text):
             size = len(text)
             self.rx = self.rx + size
-            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " + human_size(self.rx))
+            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " +
+                              human_size(self.rx))
             self.doLog(text)
 
     def onRecvError(self, error):
@@ -400,15 +403,15 @@ class MainWindow(QMainWindow):
         msg.setIconPixmap(pixmap)
         msg.setInformativeText("Copyright (c) 2017 Joshua Henderson")
         msg.setWindowTitle("TinyCom " + __version__)
-        with codecs.open(os.path.join(os.path.dirname(__file__),'LICENSE.txt'),
+        with codecs.open(os.path.join(os.path.dirname(__file__), 'LICENSE.txt'),
                          encoding='utf-8') as f:
             msg.setDetailedText(f.read())
         msg.setText(
             "<p><b>TinyCom</b> is a simple line based serial terminal GUI"
             " written in Python. This is a tool that's useful for talking to a"
             " variety of serial based hardware that can involve custom protocols"
-            " or just a standard command line interface.  It runs on anything that"
-            "supports Python and Qt.")
+            " or just a standard command line interface.  It runs on anything"
+            " that supports Python and Qt.")
 
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
