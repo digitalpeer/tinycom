@@ -27,7 +27,7 @@ USE_THREAD = True
 if USE_THREAD:
     import serialthread # pylint: disable=wrong-import-position
 
-def serial_ports():
+def populate_serial_ports():
     """Gather all serial ports found on system."""
     if sys.platform.startswith('win'):
         ports = ['COM%s' % (i + 1) for i in range(256)]
@@ -62,7 +62,7 @@ def hex_to_raw(hexstr):
     return ''.join(chr(int(x, 16)) for x in _chunks(hexstr, 2))
 
 suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
-def humansize(nbytes):
+def human_size(nbytes):
     if nbytes == 0: return '0 B'
     i = 0
     while nbytes >= 1024 and i < len(suffixes)-1:
@@ -82,14 +82,15 @@ class SettingsDialog(QT_QDialog):
     """Settings dialog."""
     def __init__(self, parent=None):
         super(SettingsDialog, self).__init__(parent)
-        load_ui_widget(os.path.join(os.path.dirname(__file__), 'settings.ui'), self)
+        load_ui_widget(os.path.join(os.path.dirname(__file__), 'settings.ui'),
+                       self)
 
         try:
-            self.port.addItems(serial_ports())
+            self.port.addItems(populate_serial_ports())
         except EnvironmentError:
             pass
 
-        self.buttonBox.accepted.connect(self.on_accept)
+        self.buttonBox.accepted.connect(self.onAccept)
 
         self.baudrate.setCurrentIndex(self.baudrate.findText("115200"))
 
@@ -130,7 +131,7 @@ class SettingsDialog(QT_QDialog):
                 'rtscts':self.rtscts.isChecked(),
                 'dsrdtr':self.dsrdtr.isChecked()}
 
-    def on_accept(self):
+    def onAccept(self):
         """Accept changes."""
         self.settings.beginGroup("settingsDialog")
         guisave.save(self, self.settings,
@@ -142,7 +143,8 @@ class MainWindow(QT_QMainWindow):
     """The main window."""
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        load_ui_widget(os.path.join(os.path.dirname(__file__), 'tinycom.ui'), self)
+        load_ui_widget(os.path.join(os.path.dirname(__file__), 'tinycom.ui'),
+                       self)
         self.serial = None
         self.rx = 0
         self.tx = 0
@@ -152,7 +154,7 @@ class MainWindow(QT_QMainWindow):
 
         ports = []
         try:
-            ports = serial_ports()
+            ports = populate_serial_ports()
         except EnvironmentError:
             pass
 
@@ -160,16 +162,16 @@ class MainWindow(QT_QMainWindow):
             self.statusBar().showMessage(
                 'No serial ports found.  You can try manually entering one.')
 
-        self.btn_open.clicked.connect(self.on_btn_open)
-        self.btn_send.clicked.connect(self.on_btn_send)
-        self.input.returnPressed.connect(self.on_btn_send)
-        self.input.textChanged.connect(self.on_input_changed)
-        self.line_end.currentIndexChanged.connect(self.on_input_changed)
-        self.btn_clear.clicked.connect(self.on_btn_clear)
-        self.btn_open_log.clicked.connect(self.on_btn_open_log)
+        self.btn_open.clicked.connect(self.onBtnOpen)
+        self.btn_send.clicked.connect(self.onBtnSend)
+        self.input.returnPressed.connect(self.onBtnSend)
+        self.input.textChanged.connect(self.onInputChanged)
+        self.line_end.currentIndexChanged.connect(self.onInputChanged)
+        self.btn_clear.clicked.connect(self.onBtnClear)
+        self.btn_open_log.clicked.connect(self.onBtnOpenLog)
         self.actionQuit.triggered.connect(QT_QApplication.quit)
-        self.actionAbout.triggered.connect(self.on_about)
-        self.history.itemDoubleClicked.connect(self.on_history_double_click)
+        self.actionAbout.triggered.connect(self.onAbout)
+        self.history.itemDoubleClicked.connect(self.onHistoryDoubleClick)
 
         self.input.setEnabled(False)
         self.btn_send.setEnabled(False)
@@ -194,26 +196,26 @@ class MainWindow(QT_QMainWindow):
                                         interCharTimeout=1.0)
         if not USE_THREAD:
             self.timer = QtCore.QTimer()
-            self.timer.timeout.connect(self.read_data)
+            self.timer.timeout.connect(self.doReadData)
         else:
             self.thread = serialthread.SerialThread(self.serial)
             self.thread.recv.connect(self.recv)
-            self.thread.recv_error.connect(self.recv_error)
+            self.thread.recv_error.connect(self.onRecvError)
 
-        self.input.key_event.connect(self.on_input_key)
+        self.input.key_event.connect(self.onInputKey)
 
-    def ui_connected_enable(self, connected):
+    def uiConnectedEnable(self, connected):
         """Toggle enabled on controls based on connect."""
         if connected:
             self.btn_open.setText("&Close Device")
-            self.on_input_changed()
+            self.onInputChanged()
         else:
             self.btn_open.setText("&Open Device")
             self.btn_send.setEnabled(connected)
         self.input.setEnabled(connected)
         self.history.setEnabled(connected)
 
-    def on_btn_open(self):
+    def onBtnOpen(self):
         """Open button clicked."""
         if self.serial.isOpen():
             if not USE_THREAD:
@@ -221,7 +223,7 @@ class MainWindow(QT_QMainWindow):
                 self.serial.close()
             else:
                 self.thread.close()
-            self.ui_connected_enable(False)
+            self.uiConnectedEnable(False)
             self.statusBar().showMessage("Not connected")
         else:
             dlg = SettingsDialog(self)
@@ -253,13 +255,13 @@ class MainWindow(QT_QMainWindow):
                                         str(settings['parity']) + ',' +
                                         str(settings['bytesize']) + ',' +
                                         str(settings['stopbits']))
-                self.ui_connected_enable(True)
+                self.uiConnectedEnable(True)
                 if not USE_THREAD:
                     self.timer.start(100)
                 else:
                     self.thread.start()
 
-    def do_log(self, text):
+    def doLog(self, text):
         """Write to log file."""
         text = text.decode("utf-8", 'backslashreplace')
         if self.remove_escape.isChecked():
@@ -279,7 +281,7 @@ class MainWindow(QT_QMainWindow):
             with open(self.log_file.text(), "a") as handle:
                 handle.write(text)
 
-    def encode_input(self):
+    def encodeInput(self):
         """
         Interpret the user input text as hex or append appropriate line ending.
         """
@@ -295,10 +297,10 @@ class MainWindow(QT_QMainWindow):
             text = text + endings[self.line_end.currentIndex()]
         return text.encode()
 
-    def on_input_changed(self):
+    def onInputChanged(self):
         """Input line edit changed."""
         try:
-            self.encode_input()
+            self.encodeInput()
         except ValueError:
             self.input.setStyleSheet("color: rgb(255, 0, 0);")
             self.btn_send.setEnabled(False)
@@ -307,7 +309,7 @@ class MainWindow(QT_QMainWindow):
         if self.serial is not None and self.serial.isOpen():
             self.btn_send.setEnabled(True)
 
-    def on_input_key(self, key):
+    def onInputKey(self, key):
         """Input line edit key pressed."""
         if key == QtCore.Qt.Key_Up:
             if self.history_index > 0:
@@ -323,18 +325,18 @@ class MainWindow(QT_QMainWindow):
                     item = self.history.item(self.history_index)
                     self.input.setText(item.text())
 
-    def on_btn_send(self):
+    def onBtnSend(self):
         """Send button clicked."""
         if not self.serial.isOpen():
             return
         try:
-            raw = self.encode_input()
+            raw = self.encodeInput()
             if not USE_THREAD:
                 ret = self.serial.write(raw)
             else:
                 ret = self.thread.write(raw)
             self.tx = self.tx + ret
-            self.rxtx.setText("TX: " + humansize(self.tx) + "  RX: " + humansize(self.rx))
+            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " + human_size(self.rx))
         except serial.SerialException as exp:
             QtGui.QMessageBox.critical(self, 'Serial write error', str(exp))
             return
@@ -343,7 +345,7 @@ class MainWindow(QT_QMainWindow):
             return
 
         if self.echo_input.isChecked():
-            self.do_log(raw)
+            self.doLog(raw)
 
         if len(self.input.text()):
             item = QT_QListWidgetItem(self.input.text())
@@ -353,7 +355,7 @@ class MainWindow(QT_QMainWindow):
 
         self.input.clear()
 
-    def on_btn_open_log(self):
+    def onBtnOpenLog(self):
         """Open log file button clicked."""
         dialog = QT_QFileDialog(self)
         dialog.setWindowTitle('Open File')
@@ -363,16 +365,16 @@ class MainWindow(QT_QMainWindow):
             filename = dialog.selectedFiles()[0]
             self.log_file.setText(filename)
 
-    def on_history_double_click(self, item):
+    def onHistoryDoubleClick(self, item):
         """Send log item double clicked."""
         self.input.setText(item.text())
-        self.on_btn_send()
+        self.onBtnSend()
 
-    def on_btn_clear(self):
+    def onBtnClear(self):
         """Clear button clicked."""
         self.log.clear()
 
-    def read_data(self):
+    def doReadData(self):
         """Read serial port."""
         if self.serial.isOpen:
             try:
@@ -387,15 +389,15 @@ class MainWindow(QT_QMainWindow):
         if len(text):
             size = len(text)
             self.rx = self.rx + size
-            self.rxtx.setText("TX: " + humansize(self.tx) + "  RX: " + humansize(self.rx))
-            self.do_log(text)
+            self.rxtx.setText("TX: " + human_size(self.tx) + "  RX: " + human_size(self.rx))
+            self.doLog(text)
 
-    def recv_error(self, error):
+    def onRecvError(self, error):
         """Receive error when reading serial port from signal."""
         QtGui.QMessageBox.critical(self, 'Serial read error', error)
-        self.on_btn_open()
+        self.onBtnOpen()
 
-    def on_about(self):
+    def onAbout(self):
         """About menu clicked."""
         msg = QtGui.QMessageBox(self)
         msg.setIcon(QtGui.QMessageBox.Information)
