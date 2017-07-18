@@ -429,7 +429,7 @@ def main():
     app = QT_QApplication(sys.argv)
     app.setApplicationName("TinyCom")
     win = MainWindow(None)
-    win.setWindowTitle("TinyCom " + __version__)
+    win.setWindowTitle("TinyCom")
     win.show()
     sys.exit(app.exec_())
 
