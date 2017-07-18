@@ -20,7 +20,7 @@ import tinycom_rc # pylint: disable=unused-import
 from lineedit import CustomLineEdit
 
 # By default, a thread is used to process the serial port. If this is set to
-# False, a timer will poll the serial port at a fixed interval, whcih can have
+# False, a timer will poll the serial port at a fixed interval, which can have
 # obvious negative side effects of delayed recv.
 USE_THREAD = True
 
@@ -72,7 +72,7 @@ def humansize(nbytes):
     return '%s %s' % (f, suffixes[i])
 
 def load_ui_widget(filename, this):
-    """Abstracts out using custom loadUi(), necessry with pySide, or PYQt's uic.loadUi()."""
+    """Abstracts out using custom loadUi(), necessary with pySide, or PYQt's uic.loadUi()."""
     if USE_QT_PY == PYSIDE:
         loadUi(filename, this, dict(CustomLineEdit=CustomLineEdit))
     else:
