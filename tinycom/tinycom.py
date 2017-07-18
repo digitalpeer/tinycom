@@ -61,8 +61,8 @@ def hex_to_raw(hexstr):
     """Convert a hex encoded string to raw bytes."""
     return ''.join(chr(int(x, 16)) for x in _chunks(hexstr, 2))
 
-suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 def human_size(nbytes):
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     if nbytes == 0: return '0 B'
     i = 0
     while nbytes >= 1024 and i < len(suffixes)-1:
