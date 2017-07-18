@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
         self.line_end.currentIndexChanged.connect(self.onInputChanged)
         self.btn_clear.clicked.connect(self.onBtnClear)
         self.btn_open_log.clicked.connect(self.onBtnOpenLog)
-        self.actionQuit.triggered.connect(QT_QApplication.quit)
+        self.actionQuit.triggered.connect(self.close)
         self.actionAbout.triggered.connect(self.onAbout)
         self.history.itemDoubleClicked.connect(self.onHistoryDoubleClick)
 
