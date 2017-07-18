@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0
 from qt import *
 
-class CustomLineEdit(QT_QLineEdit):
+class CustomLineEdit(QLineEdit):
     """Custom line edit class that handles special key events."""
 
     key_event = QtCore.pyqtSignal(int, name='key_event')

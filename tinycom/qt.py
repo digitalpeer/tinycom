@@ -73,53 +73,33 @@ else:
 
 if USE_QT_PY == PYQT5:
     from PyQt5 import QtGui, QtCore, QtWidgets, uic
-    QT_QDialog=QtWidgets.QDialog
-    QT_QFileDialog=QtWidgets.QFileDialog
-    QT_QMainWindow=QtWidgets.QMainWindow
-    QT_QApplication=QtWidgets.QApplication
-    QT_QComboBox=QtWidgets.QComboBox
-    QT_QLineEdit=QtWidgets.QLineEdit
-    QT_QCheckBox=QtWidgets.QCheckBox
-    QT_QRadioButton=QtWidgets.QRadioButton
-    QT_QSpinBox=QtWidgets.QSpinBox
-    QT_QSlider=QtWidgets.QSlider
-    QT_QSplitter=QtWidgets.QSplitter
-    QT_QListWidgetItem=QtWidgets.QListWidgetItem
-    QT_QLabel=QtWidgets.QLabel
+    from PyQt5.QtGui import *
+    from PyQt5.QtCore import *
+    from PyQt5.QtWidgets import *
 
 elif USE_QT_PY == PYSIDE:
     from PySide import QtCore, QtGui, QtUiTools
+    from PySide.QtCore import *
+    from PySide.QtGui import *
+    from PySide.QtUiTools import *
     QtCore.pyqtSignal = QtCore.Signal
-    QT_QDialog=QtGui.QDialog
-    QT_QFileDialog=QtGui.QFileDialog
-    QT_QMainWindow=QtGui.QMainWindow
-    QT_QApplication=QtGui.QApplication
-    QT_QComboBox=QtGui.QComboBox
-    QT_QLineEdit=QtGui.QLineEdit
-    QT_QCheckBox=QtGui.QCheckBox
-    QT_QRadioButton=QtGui.QRadioButton
-    QT_QSpinBox=QtGui.QSpinBox
-    QT_QSlider=QtGui.QSlider
-    QT_QSplitter=QtGui.QSplitter
-    QT_QListWidgetItem=QtGui.QListWidgetItem
-    QT_QLabel=QtGui.QLabel
-    from pyside_dynamic import *
+    QtCore.pyqtSlot = QtCore.Slot
 
 elif USE_QT_PY == PYQT4:
     import sip
     sip.setapi('QString', 2)
     sip.setapi('QVariant', 2)
     from PyQt4 import QtCore, QtGui, uic
-    QT_QDialog=QtGui.QDialog
-    QT_QFileDialog=QtGui.QFileDialog
-    QT_QMainWindow=QtGui.QMainWindow
-    QT_QApplication=QtGui.QApplication
-    QT_QComboBox=QtGui.QComboBox
-    QT_QLineEdit=QtGui.QLineEdit
-    QT_QCheckBox=QtGui.QCheckBox
-    QT_QRadioButton=QtGui.QRadioButton
-    QT_QSpinBox=QtGui.QSpinBox
-    QT_QSlider=QtGui.QSlider
-    QT_QSplitter=QtGui.QSplitter
-    QT_QListWidgetItem=QtGui.QListWidgetItem
-    QT_QLabel=QtGui.QLabel
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+
+def load_ui_widget(filename, this, custom=None):
+    """
+    Abstracts out using custom loadUi(), necessary with pySide, or PYQt's
+    uic.loadUi().
+    """
+    if USE_QT_PY == PYSIDE:
+        from .pyside_dynamic import loadUi
+        loadUi(filename, this, custom)
+    else:
+        uic.loadUi(filename, this)

@@ -71,14 +71,7 @@ def human_size(nbytes):
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
 
-def load_ui_widget(filename, this):
-    """Abstracts out using custom loadUi(), necessary with pySide, or PYQt's uic.loadUi()."""
-    if USE_QT_PY == PYSIDE:
-        loadUi(filename, this, dict(CustomLineEdit=CustomLineEdit))
-    else:
-        uic.loadUi(filename, this)
-
-class SettingsDialog(QT_QDialog):
+class SettingsDialog(QDialog):
     """Settings dialog."""
     def __init__(self, parent=None):
         super(SettingsDialog, self).__init__(parent)
@@ -139,12 +132,13 @@ class SettingsDialog(QT_QDialog):
                       "xonxoff", "rtscts", "dsrdtr"])
         self.settings.endGroup()
 
-class MainWindow(QT_QMainWindow):
+class MainWindow(QMainWindow):
     """The main window."""
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         load_ui_widget(os.path.join(os.path.dirname(__file__), 'tinycom.ui'),
-                       self)
+                       self,
+                       dict(CustomLineEdit=CustomLineEdit))
         self.serial = None
         self.rx = 0
         self.tx = 0
@@ -177,7 +171,7 @@ class MainWindow(QT_QMainWindow):
         self.btn_send.setEnabled(False)
         self.history.setEnabled(False)
 
-        self.rxtx = QT_QLabel("TX: 0 B  RX: 0 B")
+        self.rxtx = QLabel("TX: 0 B  RX: 0 B")
         self.statusBar().addPermanentWidget(self.rxtx)
 
         self.settings = QtCore.QSettings('tinycom', 'tinycom')
@@ -348,7 +342,7 @@ class MainWindow(QT_QMainWindow):
             self.doLog(raw)
 
         if len(self.input.text()):
-            item = QT_QListWidgetItem(self.input.text())
+            item = QListWidgetItem(self.input.text())
             self.history.addItem(item)
             self.history.scrollToItem(item)
             self.history_index = self.history.count()
@@ -357,11 +351,11 @@ class MainWindow(QT_QMainWindow):
 
     def onBtnOpenLog(self):
         """Open log file button clicked."""
-        dialog = QT_QFileDialog(self)
+        dialog = QFileDialog(self)
         dialog.setWindowTitle('Open File')
         dialog.setNameFilter("All files (*.*)")
         dialog.setFileMode(QtGui.QFileDialog.AnyFile)
-        if dialog.exec_() == QT_QDialog.Accepted:
+        if dialog.exec_() == QDialog.Accepted:
             filename = dialog.selectedFiles()[0]
             self.log_file.setText(filename)
 
@@ -426,7 +420,7 @@ class MainWindow(QT_QMainWindow):
 
 def main():
     """Create main app and window."""
-    app = QT_QApplication(sys.argv)
+    app = QApplication(sys.argv)
     app.setApplicationName("TinyCom")
     win = MainWindow(None)
     win.setWindowTitle("TinyCom")

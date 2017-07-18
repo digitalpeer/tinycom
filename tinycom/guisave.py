@@ -7,7 +7,7 @@
 """Saves and loads Qt GUI Control Settings"""
 import sys
 import inspect
-from qt import *
+from .qt import *
 
 def save(ui, settings, controls):
     """Save the state of controls to settings."""
@@ -20,40 +20,46 @@ def save(ui, settings, controls):
         if name not in controls:
             continue
 
-        if isinstance(obj, QT_QComboBox):
+        if isinstance(obj, QComboBox):
             name = obj.objectName()
             index = obj.currentIndex()
             text = obj.itemText(index)
             settings.setValue(name, text)
 
-        if isinstance(obj, QT_QLineEdit):
+        if isinstance(obj, QLineEdit):
             name = obj.objectName()
             value = obj.text()
             settings.setValue(name, value)
 
-        if isinstance(obj, QT_QCheckBox):
+        if isinstance(obj, QCheckBox):
             name = obj.objectName()
             state = obj.isChecked()
             settings.setValue(name, state)
 
-        if isinstance(obj, QT_QRadioButton):
+        if isinstance(obj, QRadioButton):
             name = obj.objectName()
             value = obj.isChecked()
             settings.setValue(name, value)
 
-        if isinstance(obj, QT_QSpinBox):
+        if isinstance(obj, QSpinBox):
             name = obj.objectName()
             value = obj.value()
             settings.setValue(name, value)
 
-        if isinstance(obj, QT_QSlider):
+        if isinstance(obj, QSlider):
             name = obj.objectName()
             value = obj.value()
             settings.setValue(name, value)
 
-        if isinstance(obj, QT_QSplitter):
+        if isinstance(obj, QSplitter):
             name = obj.objectName()
             settings.setValue(name, obj.saveState())
+
+        if isinstance(obj, QAction):
+            name = obj.objectName()
+            if obj.isCheckable():
+                value = obj.isChecked()
+                settings.setValue(name, value)
 
 def load(ui, settings):
     """
@@ -78,7 +84,7 @@ def load(ui, settings):
         ui.restoreGeometry(settings.value('geometry'))
 
     for name, obj in inspect.getmembers(ui):
-        if isinstance(obj, QT_QComboBox):
+        if isinstance(obj, QComboBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
@@ -92,47 +98,54 @@ def load(ui, settings):
             else:
                 obj.setCurrentIndex(index)
 
-        if isinstance(obj, QT_QLineEdit):
+        if isinstance(obj, QLineEdit):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setText(value)
 
-        if isinstance(obj, QT_QCheckBox):
+        if isinstance(obj, QCheckBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setChecked(value.lower() in ["true", "1", "yes", "y"])
 
-        if isinstance(obj, QT_QRadioButton):
+        if isinstance(obj, QRadioButton):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setChecked(value.lower() in ["true", "1", "yes", "y"])
 
-        if isinstance(obj, QT_QSlider):
+        if isinstance(obj, QSlider):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setValue(int(value))
 
-        if isinstance(obj, QT_QSpinBox):
+        if isinstance(obj, QSpinBox):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.setValue(int(value))
 
-        if isinstance(obj, QT_QSplitter):
+        if isinstance(obj, QSplitter):
             name = obj.objectName()
             value = settings.value(name, None)
             if value is None:
                 continue
             obj.restoreState(value)
+
+        if isinstance(obj, QAction):
+            name = obj.objectName()
+            value = settings.value(name, None)
+            if value is None:
+                continue
+            obj.setChecked(value.lower() in ["true", "1", "yes", "y"])
 
 if __name__ == "__main__":
     sys.exit()
